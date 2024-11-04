@@ -1,0 +1,19 @@
+openapi: 3.1.0
+info:
+  title: "Computer API"
+  description: “Working with computer records database”
+  version: "0.1.0"
+  contact:
+    name: Шалдаев Александр
+    email: shaldaev@mail.ru
+paths:
+  /computers:
+    get:
+      summary: "Example endpoint for HTML response"
+      responses:
+        '200':
+          description: "An HTML page response"
+          content:
+            text/html:
+              schema:
+                type: string
