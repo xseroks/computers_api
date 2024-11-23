@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add configuration</title>
+</head>
+<body>
+    <h1>Add New configuration</h1>
+    <form action="{{ url_for('add_configuration') }}" method="post">
+       Brand : <input type="text" name="brand"><br>
+       Department Number: <input type="number" name="department_number"><br>
+       Numder_terminals: <input type="number" name="num_terminals"><br>
+       Num_storage_devices: <input type="number" name="num_storage_devices"><br>
+        <input type="submit" value="Add">
+    </form>
+</body>
+</html>

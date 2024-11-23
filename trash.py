@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 from cassandra.cluster import Cluster
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__)
 
 # Подключение к Cassandra
 cluster = Cluster(['127.0.0.1'])
@@ -32,21 +32,11 @@ session.execute("""
     )
 """)
 
-
 # Маршрут для отображения списка компьютеров
 @app.route('/computers', methods=['GET'])
 def show_computers():
     rows = session.execute("SELECT * FROM computers")
-    
-    computers = [
-        {
-            "serial_number": row.serial_number,
-            "brand": row.brand,
-            "department_number":
-            row.department_number
-        } for row in rows
-    ]
-
+    computers = [{"serial_number": row.serial_number, "brand": row.brand, "department_number": row.department_number} for row in rows]
     return render_template("computers.html", computers=computers)
 
 # Маршрут для добавления компьютера
@@ -58,30 +48,22 @@ def add_computer():
         brand = data['brand']
         department_number = int(data['department_number'])
         
-        session.execute(
-            """
+        session.execute("""
             INSERT INTO computers (serial_number, brand, department_number)
             VALUES (%s, %s, %s)
-            """,
-            (serial_number, brand, department_number))
+        """, (serial_number, brand, department_number))
         
         return redirect(url_for('show_computers'))
-    
     return render_template("add_computer.html")
 
 # Маршрут для обновления компьютера
 @app.route('/computers/edit/<serial_number>', methods=['POST', 'GET'])
 def edit_computer(serial_number):
     if request.method == 'POST':
-        
         new_department_number = int(request.form['department_number'])
-        session.execute(
-            """
+        session.execute("""
             UPDATE computers SET department_number = %s WHERE serial_number = %s
-            """,
-            (new_department_number, serial_number)
-        )
-        print("[INFO] Update computers")
+        """, (new_department_number, serial_number))
         return redirect(url_for('show_computers'))
     
     row = session.execute("SELECT * FROM computers WHERE serial_number = %s", (serial_number,)).one()
@@ -143,3 +125,7 @@ def delete_configuration(brand, department_number):
         DELETE FROM configurations WHERE brand = %s AND department_number = %s
     """, (brand, int(department_number)))
     return redirect(url_for('show_configurations'))
+
+# Запуск сервера
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=5000)

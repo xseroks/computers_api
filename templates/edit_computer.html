@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Computer</title>
+</head>
+<body>
+    <h1>Edit Computer</h1>
+    <form action="{{ url_for('edit_computer', serial_number=computer.serial_number) }}" method="post">
+        Department Number: <input type="number" name="department_number" value="{{ computer.department_number }}"><br>
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

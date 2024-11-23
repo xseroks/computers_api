@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Configuration</title>
+</head>
+<body>
+    <h1>Edit Configuration</h1>
+    <form action="{{ url_for('edit_configuration', department_number=configuration.department_number, brand=configuration.brand ) }}" method="post">
+        Terminal Number: <input type="number" name="num_terminals" value="{{ configuration.num_terminals}}"><br>
+        Storage_Device Number: <input type="number" name="num_storage_devices" value="{{ configuration.num_storage_devices}}"><br>
+
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Computer</title>
+</head>
+<body>
+    <h1>Add New Computer</h1>
+    <form action="{{ url_for('add_computer') }}" method="post">
+        Serial Number: <input type="text" name="serial_number"><br>
+        Brand: <input type="text" name="brand"><br>
+        Department Number: <input type="number" name="department_number"><br>
+        <input type="submit" value="Add">
+    </form>
+</body>
+</html>

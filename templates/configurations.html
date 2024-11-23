@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Configurations</title>
+</head>
+<body>
+    <h1>Configurations</h1>
+    <a href="{{ url_for('add_configuration') }}">Add New Configuration</a>
+    <ul>
+        {% for configuration in configurations %}
+            <li>{{ configuration.brand }} - {{ configuration.department_number }} - {{ configuration.num_storage_devices }} - {{ configuration.num_terminals }}
+                <form action="{{ url_for('edit_configuration', department_number=configuration.department_number, brand=configuration.brand)}}" method="get">
+                    <button type="submit">Edit</button>
+                </form>
+                 <form action="{{ url_for('delete_configuration',  department_number=configuration.department_number, brand=configuration.brand) }}" method="post">
+                    <button type="submit">Delete</button>
+                </form> 
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
