@@ -1,0 +1,6 @@
+{
+    "cassandra" : {
+	"host" : "cassandra",
+	"port" : "9042"
+    }
+}

@@ -1,16 +1,16 @@
-FROM ubuntu:latest
+FROM ubuntu:22.04
+
 MAINTAINER Aleksandr Shaldaev 'Shaldaev03@mail.ru'
 
 RUN apt-get update -y
-RUN apt-get install -y python-pip python-dev build-essential
+RUN apt-get install python3-pip python3-dev build-essential -y
 
 COPY . /app
-COPY . /templates
-COPY . run.sh
-COPY . main.py
 
-RUN pip install -r requirements.txt
+WORKDIR /app
+
+RUN python3 -m pip install -r requirements.txt
 
 EXPOSE 5000
 
-ENTRYPOINT ['sh', 'run.sh']
+ENV FLASK_APP=main.py

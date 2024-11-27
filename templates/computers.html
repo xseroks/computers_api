@@ -2,22 +2,90 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Computers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .computer-details {
+            flex-grow: 1;
+        }
+        form {
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-    <h1>Computers</h1>
-    <a href="{{ url_for('add_computer') }}">Add New Computer</a>
-    <ul>
-        {% for computer in computers %}
-            <li>{{ computer.serial_number }} - {{ computer.brand }} - {{ computer.department_number }}
-                <form action="{{ url_for('edit_computer', serial_number=computer.serial_number) }}" method="get">
-                    <button type="submit">Edit</button>
-                </form>
-                <form action="{{ url_for('delete_computer', serial_number=computer.serial_number) }}" method="post">
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <p><a href="./">Return to main</a></p>
+        <h1>Computers</h1>
+        <p><a class="btn" href="{{ url_for('add_computer') }}">Add New Computer</a></p>
+        <ul>
+            {% for computer in computers %}
+                <li>
+                    <div class="computer-details">
+                        <strong>Serial:</strong> {{ computer.serial_number }}<br>
+                        <strong>Brand:</strong> {{ computer.brand }}<br>
+                        <strong>Department:</strong> {{ computer.department_number }}
+                    </div>
+                    <div>
+                        <form action="{{ url_for('edit_computer', serial_number=computer.serial_number) }}" method="get">
+                            <button type="submit" class="btn">Edit</button>
+                        </form>
+                        <form action="{{ url_for('delete_computer', serial_number=computer.serial_number) }}" method="post" style="display:inline-block;">
+                            <button type="submit" class="btn" style="background-color: #e74c3c;">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

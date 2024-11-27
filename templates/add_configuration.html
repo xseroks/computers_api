@@ -2,16 +2,91 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add configuration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Configuration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+            color: #34495e;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            align-self: flex-start;
+        }
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .back-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Add New configuration</h1>
-    <form action="{{ url_for('add_configuration') }}" method="post">
-       Brand : <input type="text" name="brand"><br>
-       Department Number: <input type="number" name="department_number"><br>
-       Numder_terminals: <input type="number" name="num_terminals"><br>
-       Num_storage_devices: <input type="number" name="num_storage_devices"><br>
-        <input type="submit" value="Add">
-    </form>
+    <div class="container">
+        <h1>Add New Configuration</h1>
+        <form action="{{ url_for('add_configuration') }}" method="post">
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand" required>
+            
+            <label for="department_number">Department:</label>
+            <input type="text" id="department_number" name="department_number" required>
+            
+            <label for="num_terminals">Terminals:</label>
+            <input type="text" id="num_terminals" name="num_terminals" required>
+            
+            <label for="num_storage_devices">Devices:</label>
+            <input type="text" id="num_storage_devices" name="num_storage_devices" required> 
+            
+            <input type="submit" value="Add">
+        </form>
+        <div class="back-link">
+            <a href="{{ url_for('show_configurations') }}">Back to Configurations</a>
+        </div>
+    </div>
 </body>
 </html>

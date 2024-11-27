@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Configurations</title>
 </head>
 <body>
+    <p><a href = './'>Return to main</a>
     <h1>Configurations</h1>
     <a href="{{ url_for('add_configuration') }}">Add New Configuration</a>
     <ul>
@@ -19,5 +20,98 @@
             </li>
         {% endfor %}
     </ul>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .conf-details {
+            flex-grow: 1;
+        }
+        form {
+            display: inline-block;
+        }
+    </style>
+</head> 
+<body>
+    <div class="container">
+        <p><a href="./">Return to main</a></p>
+        <h1>Configurations</h1>
+        <p><a class="btn" href="{{ url_for('add_configuration') }}">Add New Configuration</a></p>
+        <ul>
+            {% for configuration in configurations %}
+                <li>
+                    <div class="conf-details">
+                        <strong>Brand:</strong> {{ configuration.brand }}<br>
+                        <strong>Department:</strong> {{ configuration.department_number }} <br>
+                        <strong>Terminals:</strong> {{ configuration.num_terminals }} <br>
+                        <strong>Devices:</strong> {{ configuration.num_storage_devices }} <br>
+                    </div>
+                    <div>
+                        <form action="{{ url_for('edit_configuration', department_number=configuration.department_number, brand=configuration.brand)}}" method="get">
+                            <button type="submit" class="btn">Edit</button>
+                        </form>
+                         <form action="{{ url_for('delete_configuration',  department_number=configuration.department_number, brand=configuration.brand) }}" method="post" style="display:inline-block;">
+                            <button type="submit" class="btn" style="background-color: #e74c3c;">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>

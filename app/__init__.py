@@ -1,17 +1,40 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 from cassandra.cluster import Cluster
+import time
+import json
 
 app = Flask(__name__, template_folder='../templates')
 
-# Подключение к Cassandra
-cluster = Cluster(['127.0.0.1'])
-session = cluster.connect()
+with open('conf.json', 'r') as f:
+    data = json.load(f)
+    
+HOST = data['cassandra']['host']
+PORT = data['cassandra']['port']
 
-# Подключение к Keyspace и создание его при необходимости
+# Подключение к Cassandra
+while True:
+    try:
+        cluster = Cluster([HOST], port=PORT)
+        session = cluster.connect()
+        print("Connected to Cassandra!")
+        break
+    except Exception as e:
+        print(f"Connection failed: {e}. Retrying...")
+        time.sleep(5)
+
+# Создаем keyspace
+KEYSPACE = "my_keyspace"
 try:
-    session.set_keyspace('my_keyspace')
-except Exception as ex:
-    print(ex)
+    session.execute(f"""
+        CREATE KEYSPACE {KEYSPACE}
+        WITH replication = {{ 'class': 'SimpleStrategy', 'replication_factor': '1' }}
+    """)
+    print(f"Keyspace '{KEYSPACE}' создан успешно.")
+except Exception as e:
+    print(f"Ошибка при создании keyspace: {e}")
+
+# Устанавливаем созданный keyspace для дальнейшей работы
+session.set_keyspace(KEYSPACE)
 
 # Создание таблиц, если они еще не существуют
 session.execute("""
@@ -32,6 +55,41 @@ session.execute("""
     )
 """)
 
+@app.route('/', methods=['GET'])
+def show_index():
+    return render_template("index.html")
+
+@app.route('/computers/configurations', methods=['GET'])
+def show_combine_table():
+    # Получение всех записей из таблиц
+    rows_computers = session.execute("SELECT * FROM computers")
+    rows_confs = session.execute("SELECT * FROM configurations")
+    
+    # Преобразуем конфигурации в словарь для быстрого поиска
+    confs_dict = {}
+    for conf in rows_confs:
+        key = (conf.brand, conf.department_number)
+        confs_dict[key] = {
+            'num_terminals': conf.num_terminals,
+            'num_storage_devices': conf.num_storage_devices
+        }
+    
+    # Объединяем данные
+    combined_data = []
+    for computer in rows_computers:
+        key = (computer.brand, computer.department_number)
+        conf = confs_dict.get(key, {'num_terminals': None, 'num_storage_devices': None})
+        
+        combined_row = {
+            'serial_number': computer.serial_number,
+            'brand': computer.brand,
+            'department_number': computer.department_number,
+            'num_terminals': conf['num_terminals'],
+            'num_storage_devices': conf['num_storage_devices']
+        }
+        combined_data.append(combined_row)
+    
+    return render_template("combine_res.html", rows=combined_data)
 
 # Маршрут для отображения списка компьютеров
 @app.route('/computers', methods=['GET'])
@@ -40,10 +98,9 @@ def show_computers():
     
     computers = [
         {
-            "serial_number": row.serial_number,
-            "brand": row.brand,
-            "department_number":
-            row.department_number
+            "serial_number"         : row.serial_number,
+            "brand"                 : row.brand,
+            "department_number"     : row.department_number
         } for row in rows
     ]
 

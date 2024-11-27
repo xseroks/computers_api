@@ -1,0 +1,27 @@
+version : "3.8"
+
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    networks:
+      - cassandra_network
+  
+  app:
+    build: .
+    container_name: app
+    command : flask run --host=0.0.0.0
+    ports : 
+      - 5000:5000
+    depends_on:
+      - cassandra
+    networks:
+      - cassandra_network
+    restart: unless-stopped
+  
+networks:
+  cassandra_network:
+    name: cassandra_network
+    driver: bridge
