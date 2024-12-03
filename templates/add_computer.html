@@ -71,13 +71,13 @@
         <h1>Add New Computer</h1>
         <form action="{{ url_for('add_computer') }}" method="post">
             <label for="serial_number">Serial Number:</label>
-            <input type="text" id="serial_number" name="serial_number" required>
+            <input type="text" id="serial_number" name="serial_number" minlength="2" maxlength="50" required>
             
             <label for="brand">Brand:</label>
-            <input type="text" id="brand" name="brand" required>
+            <input type="text" id="brand" name="brand" minlength="2" maxlength="30" required>
             
             <label for="department_number">Department Number:</label>
-            <input type="number" id="department_number" name="department_number" required>
+            <input type="number" id="department_number" name="department_number" min="1" max="1000" required>
             
             <input type="submit" value="Add">
         </form>

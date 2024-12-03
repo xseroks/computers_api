@@ -71,16 +71,16 @@
         <h1>Add New Configuration</h1>
         <form action="{{ url_for('add_configuration') }}" method="post">
             <label for="brand">Brand:</label>
-            <input type="text" id="brand" name="brand" required>
+            <input type="text" id="brand" name="brand" minlength="2" maxlength="30" required>
             
             <label for="department_number">Department:</label>
-            <input type="text" id="department_number" name="department_number" required>
+            <input type="text" id="department_number" name="department_number" minlength="2" maxlength="50" required>
             
             <label for="num_terminals">Terminals:</label>
-            <input type="text" id="num_terminals" name="num_terminals" required>
+            <input type="number" id="num_terminals" name="num_terminals" min="1" max="255" required>
             
             <label for="num_storage_devices">Devices:</label>
-            <input type="text" id="num_storage_devices" name="num_storage_devices" required> 
+            <input type="number" id="num_storage_devices" name="num_storage_devices" min="1" max="255" required> 
             
             <input type="submit" value="Add">
         </form>

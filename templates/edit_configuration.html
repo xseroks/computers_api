@@ -72,9 +72,9 @@
 
         <form action="{{ url_for('edit_configuration', department_number=configuration.department_number, brand=configuration.brand ) }}" method="post">
             <label for="num_terminals">Terminals Number:</label>
-            <input type="number" id="num_terminals" name="num_terminals" value="{{ configuration.num_terminals }}" required> 
+            <input type="number" id="num_terminals" name="num_terminals" min="1" max="255" value="{{ configuration.num_terminals }}" required> 
             <label for="num_storage_devices">Devices Number:</label>
-            <input type="number" id="num_storage_devices" name="num_storage_devices" value="{{ configuration.num_storage_devices }}" required> 
+            <input type="number" id="num_storage_devices" name="num_storage_devices" min="1" max="255" value="{{ configuration.num_storage_devices }}" required> 
            
             <input type="submit" value="Update">
         </form>

@@ -115,6 +115,15 @@ def add_computer():
         brand = data['brand']
         department_number = int(data['department_number'])
         
+        if len(serial_number) > 50 or len(serial_number) < 2:
+            return redirect(url_for('error_400'))
+
+        if len(brand) > 30 or len(brand) < 2:
+            return redirect(url_for('error_400'))
+
+        if department_number < 1 or department_number > 1000:
+            return redirect(url_for('error_400'))
+
         session.execute(
             """
             INSERT INTO computers (serial_number, brand, department_number)
@@ -200,3 +209,8 @@ def delete_configuration(brand, department_number):
         DELETE FROM configurations WHERE brand = %s AND department_number = %s
     """, (brand, int(department_number)))
     return redirect(url_for('show_configurations'))
+
+# Обработчик ошибки 400
+@app.errorhandler(400)
+def error_400(error):
+    return render_template('error.html'), 400
