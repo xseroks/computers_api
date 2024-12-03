@@ -59,6 +59,22 @@ session.execute("""
 def show_index():
     return render_template("index.html")
 
+@app.route('/computers/search', methods=['GET'])
+def search_computers():
+    brand = request.args.get('brand')
+    if not brand:
+        return redirect(url_for('show_computers'))
+    
+    rows = session.execute("SELECT * FROM computers WHERE brand = %s ALLOW FILTERING", (brand,))
+    computers = [
+        {
+            "serial_number": row.serial_number,
+            "brand": row.brand,
+            "department_number": row.department_number
+        } for row in rows
+    ]
+    return render_template("computers.html", computers=computers)
+
 @app.route('/computers/configurations', methods=['GET'])
 def show_combine_table():
     # Получение всех записей из таблиц
@@ -113,8 +129,12 @@ def add_computer():
         data = request.form
         serial_number = data['serial_number']
         brand = data['brand']
-        department_number = int(data['department_number'])
-        
+
+        try:
+            department_number = int(data['department_number'])
+        except Exception as e:
+            return redirect(url_for('error_400'))
+
         if len(serial_number) > 50 or len(serial_number) < 2:
             return redirect(url_for('error_400'))
 
@@ -140,7 +160,14 @@ def add_computer():
 def edit_computer(serial_number):
     if request.method == 'POST':
         
-        new_department_number = int(request.form['department_number'])
+        try:
+            new_department_number = int(request.form['department_number'])
+        except Exception as e:
+            return redirect(url_for('error_400'))
+        
+        if new_department_number < 1 or new_department_number > 255:
+            return redirect(url_for('error_400'))
+                
         session.execute(
             """
             UPDATE computers SET department_number = %s WHERE serial_number = %s
@@ -172,10 +199,34 @@ def add_configuration():
     if request.method == 'POST':
         data = request.form
         brand = data['brand']
-        department_number = int(data['department_number'])
-        num_terminals = int(data['num_terminals'])
-        num_storage_devices = int(data['num_storage_devices'])
         
+        try:
+            department_number = int(data['department_number'])
+        except Exception as e:
+            return redirect(url_for('error_400'))
+
+        try:
+            num_terminals = int(data['num_terminals'])
+        except Exception as e:
+            return redirect(url_for('error_400'))
+
+        try:
+            num_storage_devices = int(data['num_storage_devices'])
+        except Exception as e:
+            return redirect(url_for('error_400'))
+
+        if len(brand) > 30 or len(brand) < 2:
+            return redirect(url_for('error_400'))
+
+        if department_number < 1 or department_number > 1000:
+            return redirect(url_for('error_400'))
+
+        if num_terminals < 1 or num_terminals > 255:
+            return redirect(url_for('error_400'))        
+
+        if num_storage_devices < 1 or num_storage_devices > 255:
+            return redirect(url_for('error_400'))        
+
         session.execute("""
             INSERT INTO configurations (brand, department_number, num_terminals, num_storage_devices)
             VALUES (%s, %s, %s, %s)
@@ -188,8 +239,22 @@ def add_configuration():
 @app.route('/configurations/edit/<brand>/<department_number>', methods=['POST', 'GET'])
 def edit_configuration(brand, department_number):
     if request.method == 'POST':
-        num_terminals = int(request.form['num_terminals'])
-        num_storage_devices = int(request.form['num_storage_devices'])
+        try:
+            num_terminals = int(data['num_terminals'])
+        except Exception as e:
+            return redirect(url_for('error_400'))
+
+        try:
+            num_storage_devices = int(data['num_storage_devices'])
+        except Exception as e:
+            return redirect(url_for('error_400'))
+
+        if num_terminals < 1 or num_terminals > 255:
+            return redirect(url_for('error_400'))        
+
+        if num_storage_devices < 1 or num_storage_devices > 255:
+            return redirect(url_for('error_400'))        
+        
         
         session.execute("""
             UPDATE configurations 

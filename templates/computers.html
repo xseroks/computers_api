@@ -40,6 +40,12 @@
         .btn:hover {
             background-color: #2980b9;
         }
+        .btn.reset {
+            background-color: #95a5a6;
+        }
+        .btn.reset:hover {
+            background-color: #7f8c8d;
+        }
         ul {
             list-style-type: none;
             padding: 0;
@@ -60,12 +66,33 @@
         form {
             display: inline-block;
         }
+        .search-form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .search-form input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <p><a href="./">Return to main</a></p>
         <h1>Computers</h1>
+        
+        <!-- Search form -->
+        <div class="search-form">
+            <form action="{{ url_for('search_computers') }}" method="get" style="flex-grow: 1; margin-right: 10px;">
+                <input type="text" name="brand" placeholder="Search by brand" required>
+                <button type="submit" class="btn">Search</button>
+            </form>
+            <a href="{{ url_for('show_index') }}" class="btn reset">Reset</a>
+        </div>
+        
         <p><a class="btn" href="{{ url_for('add_computer') }}">Add New Computer</a></p>
         <ul>
             {% for computer in computers %}
