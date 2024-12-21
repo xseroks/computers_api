@@ -1,88 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Configuration</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        label {
-            font-weight: bold;
-            color: #34495e;
-        }
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        input[type="submit"] {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            align-self: flex-start;
-        }
-        input[type="submit"]:hover {
-            background-color: #2980b9;
-        }
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .back-link a {
-            color: #3498db;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Edit Configuration</h1>
+{% extends "base.html" %}
 
-        <form action="{{ url_for('edit_configuration', department_number=configuration.department_number, brand=configuration.brand ) }}" method="post">
-            <label for="num_terminals">Terminals Number:</label>
-            <input type="number" id="num_terminals" name="num_terminals" min="1" max="255" value="{{ configuration.num_terminals }}" required> 
-            <label for="num_storage_devices">Devices Number:</label>
-            <input type="number" id="num_storage_devices" name="num_storage_devices" min="1" max="255" value="{{ configuration.num_storage_devices }}" required> 
-           
-            <input type="submit" value="Update">
-        </form>
+{% block title %}Редактировать конфигурацию{% endblock %}
 
-        <div class="back-link">
-            <a href="{{ url_for('show_configurations') }}">Back to Configurations</a>
+{% block extra_styles %}
+<style>
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    input {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    button {
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>Редактировать конфигурацию</h1>
+    <form action="{{ url_for('main.edit_configuration', brand=configuration.brand, department_number=configuration.department_number) }}" method="post">
+        <div class="form-group">
+            <label for="num_terminals">Количество терминалов:</label>
+            <input type="number" id="num_terminals" name="num_terminals" value="{{ configuration.num_terminals }}" required>
         </div>
-    </div>
-</body>
-</html>
+        <div class="form-group">
+            <label for="num_storage_devices">Количество устройств хранения:</label>
+            <input type="number" id="num_storage_devices" name="num_storage_devices" value="{{ configuration.num_storage_devices }}" required>
+        </div>
+        <button type="submit">Сохранить</button>
+    </form>
+    <p><a href="{{ url_for('main.show_configurations') }}">Вернуться к списку</a></p>
+{% endblock %}
 

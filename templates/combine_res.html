@@ -1,100 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Information</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
+{% block title %}Полная информация{% endblock %}
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+{% block extra_styles %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+</style>
+{% endblock %}
 
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background: #ecf0f1;
-            margin: 10px 0;
-            padding: 10px 15px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        li:nth-child(odd) {
-            background: #e8e8e8;
-        }
-
-        .info {
-            display: 100%;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .info span {
-            font-weight: bold;
-            color: #34495e;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .back-link a {
-            color: #3498db;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h1>Computers with Configurations</h1>
-        <ul>
-            {% for row in rows %}
-            <li>
-                <div class="info">
-                    <strong>Serial Number:</strong> {{ row.serial_number }} </br>
-                    <strong>Brand:</strong> {{ row.brand }} </br>
-                    <strong>Department Number:</strong> {{ row.department_number }} </br>
-                    <strong>Terminals:</strong> {{ row.num_terminals or 'N/A' }} </br>
-                    <strong>Storage Devices:</strong> {{ row.num_storage_devices or 'N/A' }}
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-        <div class="back-link">
-            <a href="{{ url_for('show_index') }}">Back to Home</a>
-        </div>
-    </div>
-</body>
-
-</html>
+{% block content %}
+    <h1>Полная информация о компьютерах и конфигурациях</h1>
+    <table>
+        <tr>
+            <th>Серийный номер</th>
+            <th>Бренд</th>
+            <th>Номер отдела</th>
+            <th>Количество терминалов</th>
+            <th>Количество устройств хранения</th>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.serial_number }}</td>
+            <td>{{ row.brand }}</td>
+            <td>{{ row.department_number }}</td>
+            <td>{{ row.num_terminals if row.num_terminals else 'Н/Д' }}</td>
+            <td>{{ row.num_storage_devices if row.num_storage_devices else 'Н/Д' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{{ url_for('main.index') }}">Вернуться на главную</a></p>
+{% endblock %}

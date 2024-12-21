@@ -1,117 +1,75 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Configurations</title>
-</head>
-<body>
-    <p><a href = './'>Return to main</a>
-    <h1>Configurations</h1>
-    <a href="{{ url_for('add_configuration') }}">Add New Configuration</a>
-    <ul>
-        {% for configuration in configurations %}
-            <li>{{ configuration.brand }} - {{ configuration.department_number }} - {{ configuration.num_storage_devices }} - {{ configuration.num_terminals }}
-                <form action="{{ url_for('edit_configuration', department_number=configuration.department_number, brand=configuration.brand)}}" method="get">
-                    <button type="submit">Edit</button>
-                </form>
-                 <form action="{{ url_for('delete_configuration',  department_number=configuration.department_number, brand=configuration.brand) }}" method="post">
-                    <button type="submit">Delete</button>
-                </form> 
-            </li>
-        {% endfor %}
-    </ul>
-</body>
-</html> -->
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Configurations</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-        a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn:hover {
-            background-color: #2980b9;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f9f9f9;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        .conf-details {
-            flex-grow: 1;
-        }
-        form {
-            display: inline-block;
-        }
-    </style>
-</head> 
-<body>
-    <div class="container">
-        <p><a href="./">Return to main</a></p>
-        <h1>Configurations</h1>
-        <p><a class="btn" href="{{ url_for('add_configuration') }}">Add New Configuration</a></p>
-        <ul>
-            {% for configuration in configurations %}
-                <li>
-                    <div class="conf-details">
-                        <strong>Brand:</strong> {{ configuration.brand }}<br>
-                        <strong>Department:</strong> {{ configuration.department_number }} <br>
-                        <strong>Terminals:</strong> {{ configuration.num_terminals }} <br>
-                        <strong>Devices:</strong> {{ configuration.num_storage_devices }} <br>
-                    </div>
-                    <div>
-                        <form action="{{ url_for('edit_configuration', department_number=configuration.department_number, brand=configuration.brand)}}" method="get">
-                            <button type="submit" class="btn">Edit</button>
-                        </form>
-                         <form action="{{ url_for('delete_configuration',  department_number=configuration.department_number, brand=configuration.brand) }}" method="post" style="display:inline-block;">
-                            <button type="submit" class="btn" style="background-color: #e74c3c;">Delete</button>
-                        </form>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-</body>
-</html>
+{% block title %}Конфигурации{% endblock %}
+
+{% block extra_styles %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+    }
+    .button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        text-decoration: none;
+        color: white;
+    }
+    .edit-button {
+        background-color: #4CAF50;
+    }
+    .delete-button {
+        background-color: #f44336;
+    }
+    .add-button {
+        background-color: #008CBA;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>Конфигурации</h1>
+    <a href="{{ url_for('main.add_configuration') }}" class="button add-button">Добавить конфигурацию</a>
+    <table>
+        <tr>
+            <th>Бренд</th>
+            <th>Номер отдела</th>
+            <th>Количество терминалов</th>
+            <th>Количество устройств хранения</th>
+            <th>Действия</th>
+        </tr>
+        {% for config in configurations %}
+        <tr>
+            <td>{{ config.brand }}</td>
+            <td>{{ config.department_number }}</td>
+            <td>{{ config.num_terminals }}</td>
+            <td>{{ config.num_storage_devices }}</td>
+            <td class="action-buttons">
+                <a href="{{ url_for('main.edit_configuration', brand=config.brand, department_number=config.department_number) }}" 
+                   class="button edit-button">Редактировать</a>
+                <form action="{{ url_for('main.delete_configuration', brand=config.brand, department_number=config.department_number) }}" 
+                      method="post" style="display: inline;">
+                    <button type="submit" class="button delete-button" 
+                            onclick="return confirm('Вы уверены, что хотите удалить эту конфигурацию?')">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <p><a href="{{ url_for('main.index') }}">Вернуться на главную</a></p>
+{% endblock %}

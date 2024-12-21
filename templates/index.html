@@ -1,56 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-        a {
-            color: #3498db;
-            text-decoration: none;
-            font-size: 18px;
-            display: block;
-            padding: 10px;
-            background: #ecf0f1;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            transition: background-color 0.3s ease;
-        }
-        a:hover {
-            background-color: #3498db;
-            color: #fff;
-        }
-        p {
-            font-size: 16px;
-            color: #34495e;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to the Management Page</h1>
-        <p>Choose an option below:</p>
-        <a href="./computers">Table Computers</a>
-        <a href="./configurations">Table Configurations</a>
-        <a href="./computers/configurations">Full Table Computers and Their Configurations</a>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+    <h1>Система управления компьютерами</h1>
+    <p>Выберите действие:</p>
+    <a href="{{ url_for('main.show_computers') }}">Таблица компьютеров</a>
+    <a href="{{ url_for('main.show_configurations') }}">Таблица конфигураций</a>
+    <a href="{{ url_for('main.show_combine_table') }}">Полная таблица компьютеров и их конфигураций</a>
+{% endblock %}
